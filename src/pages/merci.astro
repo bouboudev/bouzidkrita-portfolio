@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE } from '../data/site';
+---
+
+<Layout title="Merci — Bouzid Krita" description="Votre message a bien été envoyé.">
+  <section class="wrap max-w-2xl py-24 text-center md:py-32">
+    <p class="eyebrow reveal">Message envoyé</p>
+    <h1 class="title-xl reveal mx-auto mt-4">Merci pour votre message.</h1>
+    <p class="muted reveal mx-auto mt-5 max-w-md leading-relaxed">
+      Votre message a bien été envoyé. Je vous répondrai dès que possible.
+    </p>
+    <div class="reveal mt-10 flex flex-wrap justify-center gap-4">
+      <a href="/" class="btn btn-solid">Retour à l’accueil</a>
+    </div>
+    <p class="reveal muted mt-8 text-sm">
+      <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">Me retrouver sur LinkedIn ↗</a>
+    </p>
+  </section>
+</Layout>
