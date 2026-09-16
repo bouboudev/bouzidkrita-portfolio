@@ -1,0 +1,32 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { slugOf } from '../../lib/slug';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: slugOf(post) }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout title={`${post.data.title} — Blog`} description={post.data.description}>
+  <article class="wrap max-w-3xl py-14 md:py-20">
+    <a href="/blog" class="link-accent text-sm font-semibold">← Toutes les notes</a>
+    <p class="eyebrow mt-8">
+      <time datetime={post.data.date.toISOString()}>{post.data.date.toLocaleDateString('fr-FR')}</time>
+      {post.data.readingTime ? ` · ${post.data.readingTime}` : ''}
+    </p>
+    <h1 class="title-lg mt-3">{post.data.title}</h1>
+    <p class="muted mt-4 text-lg leading-relaxed">{post.data.description}</p>
+    {post.data.tags.length > 0 && (
+      <ul class="mt-5 flex flex-wrap gap-2">
+        {post.data.tags.map((t) => <li class="chip">#{t}</li>)}
+      </ul>
+    )}
+    <hr class="rule mt-10" />
+    <div class="prose-bk mt-8"><Content /></div>
+  </article>
+</Layout>

@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import EntryRow from '../../components/EntryRow.astro';
+import { slugOf } from '../../lib/slug';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout title="Projets — Bouzid Krita" description="Bibliothèque de projets : développement, support applicatif, monitoring, automatisation, web.">
+  <section class="wrap py-14 md:py-20">
+    <p class="eyebrow">Bibliothèque</p>
+    <h1 class="title-xl mt-4">Projets</h1>
+    <p class="muted mt-4 max-w-2xl leading-relaxed">Pas une galerie de captures : chaque projet explique le contexte, le besoin, ce que j’ai fait et ce que j’ai appris.</p>
+    <div class="mt-10">
+      {projects.map((p, i) => (
+        <EntryRow
+          num={String(i + 1).padStart(2, '0')}
+          title={p.data.title}
+          description={p.data.description}
+          href={`/projets/${slugOf(p)}`}
+          meta={`${p.data.category} · ${p.data.status}`}
+          tags={p.data.stack}
+        />
+      ))}
+    </div>
+  </section>
+</Layout>

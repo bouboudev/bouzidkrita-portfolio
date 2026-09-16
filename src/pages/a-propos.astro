@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE } from '../data/site';
+---
+
+<Layout title="À propos — Bouzid Krita" description="Parcours, motivations et manière de travailler de Bouzid Krita.">
+  <section class="wrap max-w-3xl py-14 md:py-20">
+    <p class="eyebrow">À propos</p>
+    <h1 class="title-xl mt-4">Comprendre avant d’agir</h1>
+    <div class="prose-bk mt-8">
+      <p>
+        Je m’appelle <strong>Bouzid Krita</strong>, basé à Lille.
+        Je suis un profil polyvalent, opérationnel et curieux, entre développement,
+        support applicatif et intégration.
+      </p>
+      <p>
+        Après quelques années en relation client — une première école de l’écoute
+        et du diagnostic — reconversion via l’AFPA (2020-2021), puis 3 ans comme
+        développeur Vue.js / Node.js chez Mercateam, Habiteo puis Bien’ici.
+      </p>
+      <p>
+        Ce que j’aime : <strong>comprendre comment les systèmes fonctionnent</strong>.
+        Pourquoi ça casse, où l’information se perd, comment fiabiliser un parcours
+        existant. C’est ce qui me porte vers le support applicatif et l’intégration.
+      </p>
+      <p>
+        Ma méthode : reformuler le besoin, investiguer avec méthode, documenter,
+        puis corriger sans compliquer. Et continuer à apprendre par la pratique.
+      </p>
+      <p>
+        Je vise des postes variés — développement web, support applicatif, intégration,
+        exploitation / maintenance, IT polyvalent.
+        <a href="/contact">Contactez-moi</a> — ou retrouvez-moi sur
+        <a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a> et
+        <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>.
+      </p>
+    </div>
+  </section>
+</Layout>

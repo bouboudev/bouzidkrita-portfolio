@@ -1,0 +1,57 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { slugOf } from '../../lib/slug';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: slugOf(project) },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<Layout title={`${project.data.title} — Bouzid Krita`} description={project.data.description}>
+  <article class="wrap max-w-3xl py-14 md:py-20">
+    <a href="/projets" class="link-accent text-sm font-semibold">← Tous les projets</a>
+    <p class="eyebrow mt-8">{project.data.category} · {project.data.status}</p>
+    <h1 class="title-lg mt-3">{project.data.title}</h1>
+    <p class="muted mt-4 text-lg leading-relaxed">{project.data.description}</p>
+
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href={project.data.github} target="_blank" rel="noopener noreferrer" class="btn btn-solid">GitHub ↗</a>
+      {project.data.demo && <a href={project.data.demo} target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Démo ↗</a>}
+    </div>
+
+    <dl class="fiche mt-10" aria-label="Fiche projet">
+      <div><dt>Statut</dt><dd>{project.data.status}</dd></div>
+      <div><dt>Domaine</dt><dd class="capitalize">{project.data.category}</dd></div>
+      <div><dt>Au cœur</dt><dd>{project.data.stack.slice(0, 3).join(' · ')}</dd></div>
+      <div><dt>Code</dt><dd><a class="link-accent" href={project.data.github} target="_blank" rel="noopener noreferrer">Voir le repo ↗</a></dd></div>
+    </dl>
+
+    <hr class="rule mt-10" />
+    <h2 class="title-md mt-8">Outils & technologies</h2>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {project.data.stack.map((t) => <li class="chip">{t}</li>)}
+    </ul>
+
+    {project.data.highlights.length > 0 && (
+      <>
+        <h2 class="title-md mt-10">Ce que j’ai fait</h2>
+        <ul class="mt-4 space-y-2 leading-relaxed">
+          {project.data.highlights.map((h) => <li>→ {h}</li>)}
+        </ul>
+      </>
+    )}
+
+    <hr class="rule mt-10" />
+    <div class="prose-bk mt-8">
+      <Content />
+    </div>
+  </article>
+</Layout>

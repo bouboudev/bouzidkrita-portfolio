@@ -1,0 +1,28 @@
+---
+import { SITE } from '../data/site';
+import Icon from './Icon.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="wrap mt-24 pb-12">
+  <hr class="rule" />
+  <div class="flex flex-col gap-8 pt-8 sm:flex-row sm:items-start sm:justify-between">
+    <div>
+      <p class="text-base font-semibold" style="font-family: var(--font-display)">{SITE.name}</p>
+      <p class="muted mt-1 text-sm">{SITE.location} — {SITE.baseline}</p>
+      <p class="muted mt-2 text-sm">© {year} {SITE.name}</p>
+    </div>
+    <nav class="social-row" aria-label="Liens externes">
+      <a class="social-btn" href={SITE.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <Icon name="github" /> GitHub
+      </a>
+      <a class="social-btn" href={SITE.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <Icon name="linkedin" /> LinkedIn
+      </a>
+      <a class="social-btn" href={`mailto:${SITE.email}`} aria-label="Email">
+        <Icon name="mail" /> Email
+      </a>
+    </nav>
+  </div>
+</footer>

@@ -1,0 +1,134 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHead from '../components/SectionHead.astro';
+import EntryRow from '../components/EntryRow.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../data/site';
+import { slugOf } from '../lib/slug';
+import { getCollection } from 'astro:content';
+
+const featured = (await getCollection('projects'))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const exps = (await getCollection('experience'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const domains = [
+  { icon: 'code', title: 'Développement web', text: 'Vue.js, Node.js, TypeScript.' },
+  { icon: 'support', title: 'Support applicatif', text: 'Diagnostic N2/N3, incidents, documentation.' },
+  { icon: 'layout', title: 'Intégration & UI', text: 'Design System, accessibilité, fiabilisation.' },
+  { icon: 'container', title: 'Docker & monitoring', text: 'Prometheus, Grafana, Loki.' },
+] as const;
+
+const now = [
+  { icon: 'compass', text: 'Monitoring : Prometheus, Grafana, Loki sur EasyTravel.' },
+  { icon: 'flask', text: 'Agents IA : usages, limites, revue critique.' },
+] as const;
+---
+
+<Layout>
+  <!-- Hero -->
+  <section class="hero-visual">
+    <div class="wrap pb-16 pt-16 md:pt-24">
+      <p class="eyebrow reveal">{SITE.name} — {SITE.location}</p>
+      <h1 class="title-xl reveal mt-5 max-w-4xl">
+        {SITE.role} — développement, support et intégration
+      </h1>
+      <p class="reveal mt-6 max-w-2xl text-lg md:text-xl" style="font-family: var(--font-display); font-style: italic;">
+        « {SITE.baseline} »
+      </p>
+    <p class="muted reveal mt-5 max-w-2xl leading-relaxed">
+      Je conçois des applications web, je maintiens l’existant, je résous
+      des problèmes. Ouvert aux postes dev, support et intégration.
+    </p>
+    <div class="reveal mt-8 flex flex-wrap gap-4">
+      <a href="/projets" class="btn btn-solid">Voir mes projets</a>
+      <a href="/contact" class="btn btn-ghost">Me contacter</a>
+    </div>
+    <div class="facts reveal mt-12" aria-label="En bref">
+      <div><strong>3 ans</strong> — Vue.js / Node.js</div>
+      <div><strong>Lille</strong> — sur site et remote</div>
+      <div><strong>Disponible</strong></div>
+    </div>
+    </div>
+  </section>
+  <div class="wrap"><hr class="rule" /></div>
+
+  <!-- Projets -->
+  <section class="wrap py-16 md:py-20" aria-labelledby="sel-projets">
+    <SectionHead index="01" eyebrow="Sélection" title="3 projets qui me résument" />
+    <div class="mt-6" id="sel-projets">
+      {featured.map((p, i) => (
+        <EntryRow
+          num={String(i + 1).padStart(2, '0')}
+          title={p.data.title}
+          description={p.data.description}
+          href={`/projets/${slugOf(p)}`}
+          meta={`${p.data.category} · ${p.data.status}`}
+          tags={p.data.stack}
+        />
+      ))}
+    </div>
+    <p class="mt-6"><a href="/projets" class="link-accent font-semibold">Tous les projets →</a></p>
+  </section>
+
+  <div class="wrap"><hr class="rule" /></div>
+
+  <!-- Domaines -->
+  <section class="wrap py-16 md:py-20">
+    <SectionHead index="02" eyebrow="Savoir-faire" title="Domaines dans lesquels j’interviens" />
+    <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      {domains.map((d) => (
+        <article class="card reveal">
+          <span class="icon-badge"><Icon name={d.icon} /></span>
+          <h3 class="title-md">{d.title}</h3>
+          <p class="muted mt-1 text-sm">{d.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <div class="wrap"><hr class="rule" /></div>
+
+  <!-- Parcours -->
+  <section class="wrap py-16 md:py-20">
+    <SectionHead index="03" eyebrow="Parcours" title="D’où je viens" />
+    <div class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+      {exps.map((e) => (
+        <article class="card reveal">
+          <p class="eyebrow">{e.data.startDate}{e.data.endDate ? ` → ${e.data.endDate}` : ''}</p>
+          <h3 class="mt-2 text-base font-semibold leading-snug">{e.data.role}<br /><span class="muted font-normal">{e.data.company}</span></h3>
+        </article>
+      ))}
+    </div>
+    <p class="mt-6"><a href="/parcours" class="link-accent font-semibold">Parcours complet →</a></p>
+  </section>
+
+  <div class="wrap"><hr class="rule" /></div>
+
+  <!-- En ce moment -->
+  <section class="wrap py-16 md:py-20">
+    <SectionHead index="04" eyebrow="En ce moment" title="Ce que j’explore actuellement" />
+    <ul class="mt-6 max-w-2xl space-y-3 leading-relaxed">
+      {now.map((item) => (
+        <li class="reveal"><span class="icon-inline"><Icon name={item.icon} /></span>{item.text}</li>
+      ))}
+    </ul>
+    <p class="mt-6"><a href="/blog" class="link-accent font-semibold">Lire mes notes →</a></p>
+  </section>
+
+  <div class="wrap"><hr class="rule" /></div>
+
+  <!-- Contact -->
+  <section class="wrap py-14 text-center md:py-16">
+    <p class="eyebrow reveal">Contact</p>
+    <h2 class="title-lg reveal mx-auto mt-3 max-w-xl">Un poste dev, support ou intégration à pourvoir ?</h2>
+    <div class="reveal mt-8 flex flex-wrap justify-center gap-4">
+      <a href="/contact" class="btn btn-solid">Me contacter</a>
+      <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="btn btn-ghost">GitHub ↗</a>
+    </div>
+  </section>
+</Layout>

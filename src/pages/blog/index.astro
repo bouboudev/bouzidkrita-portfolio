@@ -1,0 +1,30 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import EntryRow from '../../components/EntryRow.astro';
+import { slugOf } from '../../lib/slug';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<Layout title="Blog — Bouzid Krita" description="Notes et retours d’expérience : support, monitoring, Docker, IA, accessibilité.">
+  <section class="wrap py-14 md:py-20">
+    <p class="eyebrow">Notes</p>
+    <h1 class="title-xl mt-4">Blog</h1>
+    <p class="muted mt-4 max-w-2xl leading-relaxed">Formats courts, retours du terrain.</p>
+    <div class="mt-10">
+      {posts.map((p, i) => (
+        <EntryRow
+          num={String(i + 1).padStart(2, '0')}
+          title={p.data.title}
+          description={p.data.description}
+          href={`/blog/${slugOf(p)}`}
+          meta={`${p.data.date.toLocaleDateString('fr-FR')}${p.data.readingTime ? ` · ${p.data.readingTime}` : ''}`}
+          tags={p.data.tags}
+        />
+      ))}
+    </div>
+  </section>
+</Layout>

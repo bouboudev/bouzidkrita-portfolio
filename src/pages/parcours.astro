@@ -1,0 +1,66 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const items = (await getCollection('experience')).sort((a, b) => a.data.order - b.data.order);
+
+const formations = [
+  {
+    title: 'Concepteur développeur d’applications — niveau 6 (bac +4)',
+    school: 'AFPA, Montreuil',
+    period: '2020 → 2021',
+    description:
+      'Formation au développement web et applicatif, suivie autour du cycle de vie logiciel : analyse des besoins, conception, développement, tests, maintenance. Les bases techniques de ma reconversion — pas une expertise Java, de solides fondamentaux pour démarrer.',
+    topics: ['HTML / CSS', 'JavaScript', 'Bootstrap', 'SQL', 'Java / JEE / Spring', 'UML', 'Merise', 'POO'],
+  },
+  {
+    title: 'Designer web — niveau 5 (bac +2)',
+    school: 'L’Étape Design',
+    period: '2019 → 2020',
+    description:
+      'Formation au design web et graphique : bases de la communication visuelle et du design d’interface, avant ma reconversion vers le développement. Elle nourrit encore mon attention pour les interfaces propres et lisibles.',
+    topics: ['Design graphique', 'Design d’interface'],
+  },
+];
+---
+
+<Layout title="Parcours — Bouzid Krita" description="Parcours de Bouzid Krita : développement web, formations AFPA et design web.">
+  <section class="wrap max-w-3xl py-14 md:py-20">
+    <p class="eyebrow">Parcours</p>
+    <h1 class="title-xl mt-4">Expérience</h1>
+    <p class="muted mt-4 leading-relaxed">Trois ans comme développeur, entre construction de fonctionnalités et maintenance de l’existant.</p>
+
+    <div class="mt-10 space-y-6">
+      {items.map((e) => (
+        <article class="card reveal">
+          <p class="eyebrow">{e.data.startDate}{e.data.endDate ? ` → ${e.data.endDate}` : ''} · {e.data.type === 'freelance' ? 'freelance' : 'CDI'}</p>
+          <h2 class="title-md mt-3">{e.data.role}</h2>
+          <p class="muted text-sm">{e.data.company}{e.data.location ? ` — ${e.data.location}` : ''}</p>
+          <p class="muted mt-3 text-sm leading-relaxed">{e.data.summary}</p>
+          <ul class="mt-4 space-y-1.5 text-sm leading-relaxed">
+            {e.data.highlights.map((h) => <li>→ {h}</li>)}
+          </ul>
+          <ul class="mt-4 flex flex-wrap gap-2">
+            {e.data.stack.map((s) => <li class="chip">{s}</li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+
+    <p class="eyebrow mt-16">Formations</p>
+    <h2 class="title-lg mt-3">Deux formations, un fil conducteur</h2>
+    <div class="mt-6 space-y-6">
+      {formations.map((f) => (
+        <article class="card reveal">
+          <p class="eyebrow">{f.period}</p>
+          <h3 class="title-md mt-3">{f.title}</h3>
+          <p class="muted text-sm">{f.school}</p>
+          <p class="muted mt-3 text-sm leading-relaxed">{f.description}</p>
+          <ul class="mt-4 flex flex-wrap gap-2">
+            {f.topics.map((t) => <li class="chip">{t}</li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../data/site';
+---
+
+<Layout title="Contact — Bouzid Krita" description="Contacter Bouzid Krita : email, LinkedIn, GitHub, formulaire.">
+  <section class="wrap max-w-2xl py-14 md:py-20">
+    <p class="eyebrow">Contact</p>
+    <h1 class="title-xl mt-4">Un besoin ? Parlons-en.</h1>
+    <p class="muted mt-4 leading-relaxed">Développement, support applicatif, intégration, maintenance : je réponds vite et simplement.</p>
+
+    <nav class="social-row mt-8" aria-label="Me retrouver en ligne">
+      <a class="social-btn" href={SITE.github} target="_blank" rel="noopener noreferrer">
+        <Icon name="github" /> GitHub
+      </a>
+      <a class="social-btn" href={SITE.linkedin} target="_blank" rel="noopener noreferrer">
+        <Icon name="linkedin" /> LinkedIn
+      </a>
+      <a class="social-btn" href={`mailto:${SITE.email}`}>
+        <Icon name="mail" /> {SITE.email}
+      </a>
+    </nav>
+
+    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="card mt-10 space-y-5">
+      <input type="hidden" name="form-name" value="contact" />
+      <p class="hidden"><label>Ne pas remplir : <input name="bot-field" /></label></p>
+      <div class="field">
+        <label for="name">Nom</label>
+        <input id="name" name="name" required autocomplete="name" />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="6" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-solid">Envoyer</button>
+    </form>
+  </section>
+</Layout>

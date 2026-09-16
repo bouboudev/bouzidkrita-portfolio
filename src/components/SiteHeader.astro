@@ -1,0 +1,80 @@
+---
+import { SITE, NAV_LINKS } from '../data/site';
+import Icon from './Icon.astro';
+
+const pathname = Astro.url.pathname;
+const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
+---
+
+<header class="wrap flex h-20 items-center justify-between">
+  <a href="/" class="font-display text-lg font-semibold tracking-tight" style="font-family: var(--font-display)" aria-label="Accueil">
+    Bouzid&nbsp;Krita<span class="link-accent">.</span>
+  </a>
+
+  <nav class="hidden items-center gap-7 lg:flex" aria-label="Navigation principale">
+    {NAV_LINKS.map((link) => (
+      <a
+        href={link.href}
+        aria-current={isActive(link.href) ? 'page' : undefined}
+        class:list={[
+          'nav-link text-sm transition-colors',
+          isActive(link.href) ? 'font-semibold link-accent' : 'muted hover:text-inherit',
+        ]}
+      >
+        {link.label}
+      </a>
+    ))}
+  </nav>
+
+  <div class="flex items-center gap-1">
+    <a
+      href={SITE.github}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="muted icon-link hidden rounded-full p-2 sm:block"
+      aria-label="GitHub"
+    >
+      <Icon name="github" />
+    </a>
+    <a
+      href={SITE.linkedin}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="muted icon-link hidden rounded-full p-2 sm:block"
+      aria-label="LinkedIn"
+    >
+      <Icon name="linkedin" />
+    </a>
+    <button
+      id="theme-btn"
+      type="button"
+      class="rounded-full border px-3 py-1.5 text-xs font-semibold"
+      style="border-color: var(--color-line)"
+      aria-label="Basculer entre thème clair et sombre"
+    >
+      ◐ Thème
+    </button>
+    <button
+      id="menu-btn"
+      type="button"
+      class="rounded-full border px-3 py-1.5 text-xs font-semibold lg:hidden"
+      style="border-color: var(--color-line)"
+      aria-label="Ouvrir le menu"
+      aria-expanded="false"
+      aria-controls="menu-mobile"
+    >
+      Menu
+    </button>
+  </div>
+</header>
+
+<nav id="menu-mobile" class="wrap hidden flex-col gap-1 pb-6 lg:hidden" aria-label="Navigation mobile">
+  <hr class="rule" />
+  {NAV_LINKS.map((link) => (
+    <a href={link.href} class="py-2 text-base">
+      {link.label}
+    </a>
+  ))}
+  <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="muted py-2 text-base">GitHub ↗</a>
+  <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer" class="muted py-2 text-base">LinkedIn ↗</a>
+</nav>
