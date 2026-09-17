@@ -17,4 +17,9 @@ import { SITE } from '../data/site';
       <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer" data-umami-event="linkedin-click">Me retrouver sur LinkedIn ↗</a>
     </p>
   </section>
+  <script is:inline>
+    window.addEventListener('load', () => {
+      try { window.umami?.track('contact-success'); } catch (e) {}
+    });
+  </script>
 </Layout>
