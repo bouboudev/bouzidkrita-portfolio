@@ -1,114 +1,173 @@
-# Portfolio — Bouzid Krita
+# Bouzid Krita — Portfolio
 
-Site personnel statique : **professionnel du numérique — développement, support, intégration**.
-Astro + TypeScript + Content Collections + Markdown. Aucun CMS, aucune base de données,
-aucun framework JS côté client. Déployé sur Netlify en statique.
+Portfolio personnel de Bouzid Krita, positionné développement web, support applicatif et intégration.
+Site statique, orienté performance, simplicité et maintenabilité : pas de CMS, pas de base de données, pas de framework JS côté client.
 
-Baseline : _« Je développe, j’intègre, je dépanne et j’expérimente. »_
+## Stack technique
 
-## Commandes
+- **Astro** : framework du site, génération statique.
+- **HTML / CSS / JavaScript** : aucun framework JS côté client, scripts inline limités (menu mobile, thème, révélation au scroll).
+- **Tailwind CSS** (via `@tailwindcss/vite`) : utilitaires CSS, combiné à un `global.css` maison (design tokens et classes).
+- **TypeScript** : typage du projet (`tsconfig` strict), schémas de contenu validés avec Zod.
+- **Content Collections / Markdown** : contenus projets, blog et expériences en Markdown (`src/content/`).
+- **Netlify** : hébergement et déploiement du site statique.
+- **Netlify Forms** : formulaire de contact, sans backend custom.
+- **Umami Analytics (Cloud)** : mesure d'audience respectueuse de la vie privée, script intégré globalement.
+- **GitHub Actions** : workflow du rapport analytics hebdomadaire.
+- **Resend** : envoi du rapport hebdomadaire par email via API REST.
+- **Node.js** : scripts (`>= 22.12.0` pour le projet, voir `package.json`) ; le script de rapport fonctionne avec Node 20 et `fetch` natif, sans dépendance.
 
-```sh
-npm install
-npm run dev      # http://localhost:4321
-npm run build    # build statique -> dist/
-npm run preview  # prévisualiser le build
-```
+## Fonctionnalités
 
-## Direction artistique
+- Pages : accueil, projets (liste + détail), parcours, blog (liste + article), à propos, contact, remerciement (`/merci/`), 404.
+- Projets, articles et expériences gérés en Markdown via les Content Collections.
+- Page parcours : timeline d'expériences + section formations.
+- Formulaire de contact Netlify avec redirection vers `/merci/` et honeypot anti-spam.
+- Responsive (navigation desktop + menu mobile accessible).
+- Thème clair / sombre avec mémorisation (`localStorage`).
+- SEO : sitemap automatique (`@astrojs/sitemap`), `robots.txt`, canonical, Open Graph / Twitter Cards, JSON-LD `Person`, HTML sémantique, skip-link.
+- Analytics Umami avec événements personnalisés :
+  - `github-click`
+  - `linkedin-click`
+  - `contact-click`
+  - `contact-submit`
+  - `contact-success` (déclenché au chargement de `/merci/` via `umami.track`)
 
-« Carnet d’atelier » éditorial : fond papier, encre, un seul accent (braise),
-titres serif (stack système, zéro dépendance), sur-titres mono numérotés
-(`01 — Sélection`), filets horizontaux, listes éditoriales avec flèches au survol.
-Clair par défaut, sombre via bouton (mémorisé en `localStorage`).
-Aucune carte générique, aucune jauge, aucun effet gamer.
-
-## Architecture
+## Structure du projet
 
 ```text
 src/
-  content/
-    projects/     # un .md = un projet
-    blog/         # un .md = un article
-    experience/   # un .md = une expérience (timeline : Bien’ici, Habiteo, Mercateam)
-  content.config.ts  # schémas Zod des 3 collections
-  lib/slug.ts        # slug à partir de l'id (Content Layer)
-  data/site.ts       # identité, liens, navigation (Projets, Parcours, Blog, À propos, Contact)
-  layouts/Layout.astro   # UNIQUE layout : importe global.css UNE fois + SEO + scripts
-  components/            # SiteHeader, SiteFooter, SectionHead, EntryRow, Icon
-  pages/
-    index.astro
-    projets/index.astro + projets/[slug].astro
-    parcours.astro    # expériences + section Formations (statique)
-    blog/index.astro + blog/[slug].astro
-    a-propos.astro
-    contact.astro     # Netlify Forms
-    robots.txt.ts
-  styles/global.css  # design tokens + classes (.wrap, .eyebrow, .title-*, .entry-row, .card, .btn, .chip, .facts, .fiche, .social-btn, .prose-bk)
-public/favicon.svg
+  components/      # SiteHeader, SiteFooter, SectionHead, EntryRow, Icon
+  layouts/         # Layout.astro : layout unique (CSS global, SEO, scripts)
+  pages/           # index, projets, parcours, blog, a-propos, contact, merci, 404, robots.txt
+  content/         # projects, blog, experience (Markdown)
+  content.config.ts# schémas Zod des collections
+  data/site.ts     # identité, liens, navigation
+  lib/slug.ts      # slug à partir de l'id des contenus
+  styles/global.css# design tokens et classes
+public/            # favicon.svg
+scripts/           # weekly-analytics-report.mjs
+.github/workflows/ # weekly-analytics-report.yml
+astro.config.mjs
 netlify.toml
 ```
 
-Règle anti-bug : `global.css` n’est importé que dans `src/layouts/Layout.astro`.
-Ne jamais dupliquer le layout, ne jamais importer le CSS ailleurs.
+`global.css` n'est importé que dans `src/layouts/Layout.astro`. Le layout est unique : il porte le SEO, le script Umami et les scripts inline.
 
-## Ajouter un projet
+## Installation locale
 
-`src/content/projects/mon-projet.md` :
-
-```md
----
-title: "Titre"
-description: "Résumé en une phrase."
-category: "developpement" # developpement | support | integration | infrastructure | monitoring | automatisation | ia | web | personnel
-status: "En cours"
-stack: ["Vue.js", "Docker"]
-highlights: ["Ce que j’ai fait"]
-github: "https://github.com/bouboudev/..."
-demo: "https://..."   # optionnel
-featured: false       # true = accueil
-order: 5
----
-
-Contexte, besoin, solution, difficultés, apprentissages...
+```bash
+git clone https://github.com/bouboudev/bouzidkrita-portfolio.git
+cd bouzidkrita-portfolio
+npm install
+npm run dev
 ```
 
-## Ajouter un article
+URL locale par défaut : `http://localhost:4321`.
 
-`src/content/blog/mon-article.md` :
+## Build
 
-```md
----
-title: "Titre"
-description: "Résumé."
-date: 2026-09-16
-tags: ["support applicatif"]
-readingTime: "5 min"
-draft: false
----
+```bash
+npm run build
 ```
 
-## Ajouter une fiche d’expérimentation
+Le build statique génère `dist/`. Prévisualisation locale (script présent dans `package.json`) :
 
-Pas de rubrique Lab : si une expérimentation devient concrète, ajoutez-la
-comme un projet (voir ci-dessus).
+```bash
+npm run preview
+```
 
-## Modifier le parcours
+## Déploiement
 
-Les 3 expériences de la timeline sont un fichier chacune dans `src/content/experience/`
-(`company, role, location?, startDate, endDate?, current, type, summary, highlights, stack, order`).
-La section Formations (AFPA, design web) est en dur dans `src/pages/parcours.astro`.
+Site déployé sur Netlify. Configuration effective dans `netlify.toml` :
 
-## Déployer sur Netlify
+- build command : `npm run build`
+- publish directory : `dist`
 
-1. Pousser sur GitHub/GitLab.
-2. Netlify → Add new site → Import from Git.
-3. Build : `npm run build`, dossier : `dist` (déjà dans `netlify.toml`).
-4. Le formulaire `/contact` fonctionne via Netlify Forms (`data-netlify="true"` + `form-name`).
-5. SEO inclus : sitemap auto, `robots.txt`, OpenGraph, canonical, JSON-LD Person,
-   skip-link, HTML sémantique.
+URL canonique configurée dans le projet (`astro.config.mjs`, `src/data/site.ts`) : `https://www.bouzidkrita.com`.
+En-têtes de sécurité définis dans `netlify.toml` (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`).
 
-## Notes de contenu
+## Formulaire de contact
 
-Aucune expérience ni compétence inventée : les éléments incertains
-(téléconseil, AFPA, associatif) sont marqués « à compléter » dans les fichiers.
+- Géré par Netlify Forms (`data-netlify="true"`, `form-name="contact"`).
+- Soumission en `POST` avec redirection vers `/merci/`.
+- Honeypot anti-spam (`bot-field`).
+- Aucune logique backend custom.
+
+## Analytics
+
+- Umami Cloud, approche privacy-friendly (pas de cookies publicitaires).
+- Script intégré globalement dans le `<head>` du layout unique, chargé sur toutes les pages.
+- Événements suivis via attributs natifs `data-umami-event` (`github-click`, `linkedin-click`, `contact-click`, `contact-submit`) et appel `umami.track('contact-success')` au chargement de `/merci/`.
+- Statistiques consultables dans le dashboard Umami (partage via Share URL).
+- Aucun token, clé ou secret n'est versionné dans le repo.
+
+## Rapport analytics hebdomadaire automatisé
+
+Fichiers :
+
+- `scripts/weekly-analytics-report.mjs`
+- `.github/workflows/weekly-analytics-report.yml`
+
+Flux :
+
+Umami (Share URL) → script Node.js → GitHub Actions → Resend → email de synthèse.
+
+Le workflow :
+
+- récupère les statistiques des 7 derniers jours (`startAt` = maintenant − 7 jours, `endAt` = maintenant) ;
+- calcule visiteurs, visites, pages vues, taux de rebond (`bounces / visits * 100`), durée totale et durée moyenne par visite ;
+- récupère top pages, sources (referrers, vide = « Direct ») et événements (`github-click`, `linkedin-click`, `contact-click`, `contact-submit`, `contact-success`, 0 si absent) ;
+- envoie un email HTML via l'API Resend ;
+- tourne automatiquement chaque lundi à 07:00 UTC ;
+- peut être lancé manuellement avec `workflow_dispatch`.
+
+Secrets GitHub requis (noms uniquement, jamais de valeurs dans le repo) :
+
+- `UMAMI_SHARE_TOKEN`
+- `UMAMI_WEBSITE_ID`
+- `RESEND_API_KEY`
+- `REPORT_EMAIL`
+- `REPORT_FROM_EMAIL`
+
+À ajouter dans : GitHub → Settings → Secrets and variables → Actions → Repository secrets.
+
+## Test manuel du rapport
+
+GitHub → Actions → Weekly Analytics Report → Run workflow.
+
+Le domaine utilisé comme expéditeur doit être validé dans Resend, sinon l'envoi échoue (le workflow affiche le statut et sort en erreur).
+
+## DNS / email
+
+- Le repo ne contient aucune configuration DNS : rien n'est documenté ici à ce sujet.
+- Resend sert uniquement à l'envoi du rapport hebdomadaire.
+- Aucune valeur DKIM/SPF ni donnée sensible n'est documentée.
+
+## Scripts utiles
+
+| Commande          | Usage                          |
+| ----------------- | ------------------------------ |
+| `npm run dev`     | serveur de développement local |
+| `npm run build`   | build statique de production   |
+| `npm run preview` | prévisualiser le build         |
+| `npm run astro`   | CLI Astro                      |
+
+Le script de rapport se lance hors npm : `node scripts/weekly-analytics-report.mjs` (variables d'environnement requises, voir section rapport).
+
+## Sécurité / secrets
+
+- Aucun secret dans le repo.
+- Secrets uniquement dans GitHub Actions (Repository secrets).
+- Ne jamais committer de `.env` contenant des secrets.
+- En cas d'exposition, renouveler le Share token Umami (via le Share URL) et les clés concernées.
+
+## Licence
+
+Projet personnel. Aucune licence open source n'est actuellement définie.
+
+## Liens
+
+- Site : https://www.bouzidkrita.com
+- GitHub : https://github.com/bouboudev
+- LinkedIn : https://fr.linkedin.com/in/bouzidkrita
