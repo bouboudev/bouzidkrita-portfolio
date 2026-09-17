@@ -46,7 +46,7 @@ const now = [
     </p>
     <div class="reveal mt-8 flex flex-wrap gap-4">
       <a href="/projets/" class="btn btn-solid">Voir mes projets</a>
-      <a href="/contact/" class="btn btn-ghost">Me contacter</a>
+      <a href="/contact/" class="btn btn-ghost" data-umami-event="contact-click">Me contacter</a>
     </div>
     <div class="facts reveal mt-12" aria-label="En bref">
       <div><strong>3 ans</strong> — Vue.js / Node.js</div>
@@ -127,8 +127,8 @@ const now = [
     <p class="eyebrow reveal">Contact</p>
     <h2 class="title-lg reveal mx-auto mt-3 max-w-xl">Un poste dev, support ou intégration à pourvoir ?</h2>
     <div class="reveal mt-8 flex flex-wrap justify-center gap-4">
-      <a href="/contact/" class="btn btn-solid">Me contacter</a>
-      <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="btn btn-ghost">GitHub ↗</a>
+      <a href="/contact/" class="btn btn-solid" data-umami-event="contact-click">Me contacter</a>
+      <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="btn btn-ghost" data-umami-event="github-click">GitHub ↗</a>
     </div>
   </section>
 </Layout>

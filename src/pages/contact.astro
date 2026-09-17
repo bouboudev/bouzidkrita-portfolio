@@ -11,10 +11,10 @@ import { SITE } from '../data/site';
     <p class="muted mt-4 leading-relaxed">Développement, support applicatif, intégration, maintenance : je réponds vite et simplement.</p>
 
     <nav class="social-row mt-8" aria-label="Me retrouver en ligne">
-      <a class="social-btn" href={SITE.github} target="_blank" rel="noopener noreferrer">
+      <a class="social-btn" href={SITE.github} target="_blank" rel="noopener noreferrer" data-umami-event="github-click">
         <Icon name="github" /> GitHub
       </a>
-      <a class="social-btn" href={SITE.linkedin} target="_blank" rel="noopener noreferrer">
+      <a class="social-btn" href={SITE.linkedin} target="_blank" rel="noopener noreferrer" data-umami-event="linkedin-click">
         <Icon name="linkedin" /> LinkedIn
       </a>
       <a class="social-btn" href={`mailto:${SITE.email}`}>
@@ -37,7 +37,7 @@ import { SITE } from '../data/site';
         <label for="message">Message</label>
         <textarea id="message" name="message" rows="6" required></textarea>
       </div>
-      <button type="submit" class="btn btn-solid">Envoyer</button>
+      <button type="submit" class="btn btn-solid" data-umami-event="contact-submit">Envoyer</button>
     </form>
   </section>
 </Layout>

@@ -14,10 +14,10 @@ const year = new Date().getFullYear();
       <p class="muted mt-2 text-sm">© {year} {SITE.name}</p>
     </div>
     <nav class="social-row" aria-label="Liens externes">
-      <a class="social-btn" href={SITE.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+      <a class="social-btn" href={SITE.github} target="_blank" rel="noopener noreferrer" data-umami-event="github-click" aria-label="GitHub">
         <Icon name="github" /> GitHub
       </a>
-      <a class="social-btn" href={SITE.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+      <a class="social-btn" href={SITE.linkedin} target="_blank" rel="noopener noreferrer" data-umami-event="linkedin-click" aria-label="LinkedIn">
         <Icon name="linkedin" /> LinkedIn
       </a>
       <a class="social-btn" href={`mailto:${SITE.email}`} aria-label="Email">

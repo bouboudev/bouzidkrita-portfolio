@@ -21,6 +21,7 @@ const isActive = (href: string) => {
     {NAV_LINKS.map((link) => (
       <a
         href={link.href}
+        data-umami-event={link.href === '/contact/' ? 'contact-click' : undefined}
         aria-current={isActive(link.href) ? 'page' : undefined}
         class:list={[
           'nav-link text-sm transition-colors',
@@ -37,6 +38,7 @@ const isActive = (href: string) => {
       href={SITE.github}
       target="_blank"
       rel="noopener noreferrer"
+      data-umami-event="github-click"
       class="muted icon-link hidden min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2 sm:inline-flex"
       aria-label="GitHub (nouvel onglet)"
     >
@@ -46,6 +48,7 @@ const isActive = (href: string) => {
       href={SITE.linkedin}
       target="_blank"
       rel="noopener noreferrer"
+      data-umami-event="linkedin-click"
       class="muted icon-link hidden min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2 sm:inline-flex"
       aria-label="LinkedIn (nouvel onglet)"
     >
@@ -83,6 +86,7 @@ const isActive = (href: string) => {
         <li>
           <a
             href={link.href}
+            data-umami-event={link.href === '/contact/' ? 'contact-click' : undefined}
             aria-current={isActive(link.href) ? 'page' : undefined}
             class:list={[
               'mobile-menu-link',
@@ -95,8 +99,8 @@ const isActive = (href: string) => {
       ))}
     </ul>
     <div class="mobile-menu-social">
-      <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="social-btn">GitHub ↗</a>
-      <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer" class="social-btn">LinkedIn ↗</a>
+      <a href={SITE.github} target="_blank" rel="noopener noreferrer" data-umami-event="github-click" class="social-btn">GitHub ↗</a>
+      <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer" data-umami-event="linkedin-click" class="social-btn">LinkedIn ↗</a>
     </div>
   </nav>
 </div>
