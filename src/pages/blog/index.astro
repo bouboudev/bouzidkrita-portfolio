@@ -20,7 +20,7 @@ const posts = (await getCollection('blog'))
           num={String(i + 1).padStart(2, '0')}
           title={p.data.title}
           description={p.data.description}
-          href={`/blog/${slugOf(p)}`}
+          href={`/blog/${slugOf(p)}/`}
           meta={`${p.data.date.toLocaleDateString('fr-FR')}${p.data.readingTime ? ` · ${p.data.readingTime}` : ''}`}
           tags={p.data.tags}
         />

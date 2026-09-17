@@ -14,7 +14,7 @@ const { Content } = await render(post);
 
 <Layout title={`${post.data.title} — Blog`} description={post.data.description}>
   <article class="wrap max-w-3xl py-14 md:py-20">
-    <a href="/blog" class="link-accent text-sm font-semibold">← Toutes les notes</a>
+    <a href="/blog/" class="link-accent text-sm font-semibold">← Toutes les notes</a>
     <p class="eyebrow mt-8">
       <time datetime={post.data.date.toISOString()}>{post.data.date.toLocaleDateString('fr-FR')}</time>
       {post.data.readingTime ? ` · ${post.data.readingTime}` : ''}

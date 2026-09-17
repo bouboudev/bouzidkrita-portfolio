@@ -19,4 +19,4 @@ on casse quelque chose en cherchant — mais c'est exactement le travail
 de support N2/N3 : hypothèses, preuves, documentation.
 
 Prochaine étape : ajouter des scénarios d'incidents documentés de bout en bout.
-Voir le [projet EasyTravel](/projets/easytravel-support-lab).
+Voir le [projet EasyTravel](/projets/easytravel-support-lab/).

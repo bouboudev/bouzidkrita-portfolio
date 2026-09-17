@@ -13,9 +13,9 @@ export const SITE = {
 } as const;
 
 export const NAV_LINKS = [
-  { label: 'Projets', href: '/projets' },
-  { label: 'Parcours', href: '/parcours' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'À propos', href: '/a-propos' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Projets', href: '/projets/' },
+  { label: 'Parcours', href: '/parcours/' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'À propos', href: '/a-propos/' },
+  { label: 'Contact', href: '/contact/' },
 ] as const;

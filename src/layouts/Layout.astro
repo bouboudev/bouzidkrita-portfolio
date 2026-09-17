@@ -77,13 +77,72 @@ const jsonLd = {
       } else {
         els.forEach((el) => el.classList.add('is-visible'));
       }
-      // Menu mobile
-      const btn = document.getElementById('menu-btn');
-      const menu = document.getElementById('menu-mobile');
-      btn?.addEventListener('click', () => {
-        const open = menu?.classList.toggle('hidden');
-        btn.setAttribute('aria-expanded', open ? 'false' : 'true');
-      });
+      // Menu mobile accessible : drawer + scroll-lock + Escape + focus
+      (() => {
+        const btn = document.getElementById('menu-btn');
+        const menu = document.getElementById('menu-mobile');
+        if (!btn || !menu) return;
+        const panel = menu.querySelector('.mobile-menu-panel');
+        const label = btn.querySelector('.menu-label');
+        let lastFocus = null;
+
+        const isOpen = () => !menu.hasAttribute('hidden');
+
+        const openMenu = () => {
+          lastFocus = document.activeElement;
+          menu.removeAttribute('hidden');
+          document.body.classList.add('menu-open');
+          document.body.style.overflow = 'hidden';
+          btn.setAttribute('aria-expanded', 'true');
+          btn.setAttribute('aria-label', 'Fermer le menu');
+          btn.classList.add('is-open');
+          if (label) label.textContent = 'Fermer';
+          const firstLink = panel ? panel.querySelector('a') : null;
+          if (firstLink) window.requestAnimationFrame(() => firstLink.focus({ preventScroll: true }));
+        };
+
+        const closeMenu = (restoreFocus) => {
+          if (!isOpen()) return;
+          menu.setAttribute('hidden', '');
+          document.body.classList.remove('menu-open');
+          document.body.style.overflow = '';
+          btn.setAttribute('aria-expanded', 'false');
+          btn.setAttribute('aria-label', 'Ouvrir le menu');
+          btn.classList.remove('is-open');
+          if (label) label.textContent = 'Menu';
+          if (restoreFocus && lastFocus && typeof lastFocus.focus === 'function') {
+            lastFocus.focus({ preventScroll: true });
+          } else if (restoreFocus) {
+            btn.focus({ preventScroll: true });
+          }
+        };
+
+        btn.addEventListener('click', () => {
+          if (isOpen()) closeMenu(true);
+          else openMenu();
+        });
+
+        // Fermeture après navigation (clic sur un lien interne)
+        menu.querySelectorAll('a').forEach((a) => {
+          a.addEventListener('click', () => closeMenu(false));
+        });
+
+        // Clic sur le fond assombri
+        menu.querySelectorAll('[data-menu-close]').forEach((el) => {
+          el.addEventListener('click', () => closeMenu(true));
+        });
+
+        // Touche Escape
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeMenu(true);
+        });
+
+        // Si on repasse en desktop, refermer proprement
+        const mq = window.matchMedia('(min-width: 1024px)');
+        const onViewport = (e) => { if (e.matches) closeMenu(false); };
+        if (typeof mq.addEventListener === 'function') mq.addEventListener('change', onViewport);
+        else if (typeof mq.addListener === 'function') mq.addListener(onViewport);
+      })();
       // Thème clair / sombre
       document.getElementById('theme-btn')?.addEventListener('click', () => {
         const dark = document.documentElement.classList.toggle('dark');

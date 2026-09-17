@@ -3,11 +3,17 @@ import { SITE, NAV_LINKS } from '../data/site';
 import Icon from './Icon.astro';
 
 const pathname = Astro.url.pathname;
-const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
+// Normalise pour comparer avec/sans slash final (racine "/" exclue).
+const norm = (p: string) => (p.length > 1 ? p.replace(/\/+$/, '') : p);
+const current = norm(pathname);
+const isActive = (href: string) => {
+  const target = norm(href);
+  return current === target || current.startsWith(target + '/');
+};
 ---
 
-<header class="wrap flex h-20 items-center justify-between">
-  <a href="/" class="font-display text-lg font-semibold tracking-tight" style="font-family: var(--font-display)" aria-label="Accueil">
+<header class="site-header wrap flex h-16 items-center justify-between sm:h-20">
+  <a href="/" class="font-display shrink-0 text-lg font-semibold tracking-tight" style="font-family: var(--font-display)" aria-label="Accueil — Bouzid Krita">
     Bouzid&nbsp;Krita<span class="link-accent">.</span>
   </a>
 
@@ -26,13 +32,13 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
     ))}
   </nav>
 
-  <div class="flex items-center gap-1">
+  <div class="flex shrink-0 items-center gap-2">
     <a
       href={SITE.github}
       target="_blank"
       rel="noopener noreferrer"
-      class="muted icon-link hidden rounded-full p-2 sm:block"
-      aria-label="GitHub"
+      class="muted icon-link hidden min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2 sm:inline-flex"
+      aria-label="GitHub (nouvel onglet)"
     >
       <Icon name="github" />
     </a>
@@ -40,15 +46,15 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
       href={SITE.linkedin}
       target="_blank"
       rel="noopener noreferrer"
-      class="muted icon-link hidden rounded-full p-2 sm:block"
-      aria-label="LinkedIn"
+      class="muted icon-link hidden min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2 sm:inline-flex"
+      aria-label="LinkedIn (nouvel onglet)"
     >
       <Icon name="linkedin" />
     </a>
     <button
       id="theme-btn"
       type="button"
-      class="rounded-full border px-3 py-1.5 text-xs font-semibold"
+      class="inline-flex min-h-[44px] items-center rounded-full border px-4 text-xs font-semibold"
       style="border-color: var(--color-line)"
       aria-label="Basculer entre thème clair et sombre"
     >
@@ -57,24 +63,40 @@ const isActive = (href: string) => pathname === href || pathname.startsWith(href
     <button
       id="menu-btn"
       type="button"
-      class="rounded-full border px-3 py-1.5 text-xs font-semibold lg:hidden"
+      class="menu-btn inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 rounded-full border px-4 text-sm font-semibold lg:hidden"
       style="border-color: var(--color-line)"
       aria-label="Ouvrir le menu"
       aria-expanded="false"
       aria-controls="menu-mobile"
     >
-      Menu
+      <span class="menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="menu-label">Menu</span>
     </button>
   </div>
 </header>
 
-<nav id="menu-mobile" class="wrap hidden flex-col gap-1 pb-6 lg:hidden" aria-label="Navigation mobile">
-  <hr class="rule" />
-  {NAV_LINKS.map((link) => (
-    <a href={link.href} class="py-2 text-base">
-      {link.label}
-    </a>
-  ))}
-  <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="muted py-2 text-base">GitHub ↗</a>
-  <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer" class="muted py-2 text-base">LinkedIn ↗</a>
-</nav>
+<div id="menu-mobile" class="mobile-menu" hidden>
+  <div class="mobile-menu-backdrop" data-menu-close aria-hidden="true"></div>
+  <nav class="mobile-menu-panel wrap" aria-label="Navigation mobile" id="menu-mobile-nav">
+    <ul class="mobile-menu-list">
+      {NAV_LINKS.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+            class:list={[
+              'mobile-menu-link',
+              isActive(link.href) ? 'link-accent font-semibold' : undefined,
+            ]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mobile-menu-social">
+      <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="social-btn">GitHub ↗</a>
+      <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer" class="social-btn">LinkedIn ↗</a>
+    </div>
+  </nav>
+</div>

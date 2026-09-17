@@ -45,8 +45,8 @@ const now = [
       des problèmes. Ouvert aux postes dev, support et intégration.
     </p>
     <div class="reveal mt-8 flex flex-wrap gap-4">
-      <a href="/projets" class="btn btn-solid">Voir mes projets</a>
-      <a href="/contact" class="btn btn-ghost">Me contacter</a>
+      <a href="/projets/" class="btn btn-solid">Voir mes projets</a>
+      <a href="/contact/" class="btn btn-ghost">Me contacter</a>
     </div>
     <div class="facts reveal mt-12" aria-label="En bref">
       <div><strong>3 ans</strong> — Vue.js / Node.js</div>
@@ -66,13 +66,13 @@ const now = [
           num={String(i + 1).padStart(2, '0')}
           title={p.data.title}
           description={p.data.description}
-          href={`/projets/${slugOf(p)}`}
+          href={`/projets/${slugOf(p)}/`}
           meta={`${p.data.category} · ${p.data.status}`}
           tags={p.data.stack}
         />
       ))}
     </div>
-    <p class="mt-6"><a href="/projets" class="link-accent font-semibold">Tous les projets →</a></p>
+    <p class="mt-6"><a href="/projets/" class="link-accent font-semibold">Tous les projets →</a></p>
   </section>
 
   <div class="wrap"><hr class="rule" /></div>
@@ -104,7 +104,7 @@ const now = [
         </article>
       ))}
     </div>
-    <p class="mt-6"><a href="/parcours" class="link-accent font-semibold">Parcours complet →</a></p>
+    <p class="mt-6"><a href="/parcours/" class="link-accent font-semibold">Parcours complet →</a></p>
   </section>
 
   <div class="wrap"><hr class="rule" /></div>
@@ -117,7 +117,7 @@ const now = [
         <li class="reveal"><span class="icon-inline"><Icon name={item.icon} /></span>{item.text}</li>
       ))}
     </ul>
-    <p class="mt-6"><a href="/blog" class="link-accent font-semibold">Lire mes notes →</a></p>
+    <p class="mt-6"><a href="/blog/" class="link-accent font-semibold">Lire mes notes →</a></p>
   </section>
 
   <div class="wrap"><hr class="rule" /></div>
@@ -127,7 +127,7 @@ const now = [
     <p class="eyebrow reveal">Contact</p>
     <h2 class="title-lg reveal mx-auto mt-3 max-w-xl">Un poste dev, support ou intégration à pourvoir ?</h2>
     <div class="reveal mt-8 flex flex-wrap justify-center gap-4">
-      <a href="/contact" class="btn btn-solid">Me contacter</a>
+      <a href="/contact/" class="btn btn-solid">Me contacter</a>
       <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="btn btn-ghost">GitHub ↗</a>
     </div>
   </section>

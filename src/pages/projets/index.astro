@@ -19,7 +19,7 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
           num={String(i + 1).padStart(2, '0')}
           title={p.data.title}
           description={p.data.description}
-          href={`/projets/${slugOf(p)}`}
+          href={`/projets/${slugOf(p)}/`}
           meta={`${p.data.category} · ${p.data.status}`}
           tags={p.data.stack}
         />
