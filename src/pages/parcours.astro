@@ -4,6 +4,14 @@ import { getCollection } from 'astro:content';
 
 const items = (await getCollection('experience')).sort((a, b) => a.data.order - b.data.order);
 
+const typeLabel: Record<string, string> = {
+  salarie: 'CDI',
+  freelance: 'Freelance',
+  formation: 'Formation',
+  associatif: 'Associatif',
+  support: 'Support',
+};
+
 const formations = [
   {
     title: 'Concepteur développeur d’applications — niveau 6 (bac +4)',
@@ -33,7 +41,7 @@ const formations = [
     <div class="mt-10 space-y-6">
       {items.map((e) => (
         <article class="card reveal">
-          <p class="eyebrow">{e.data.startDate}{e.data.endDate ? ` → ${e.data.endDate}` : ''} · {e.data.type === 'freelance' ? 'freelance' : 'CDI'}</p>
+          <p class="eyebrow">{e.data.startDate}{e.data.endDate ? ` → ${e.data.endDate}` : ''} · {typeLabel[e.data.type] ?? e.data.type}</p>
           <h2 class="title-md mt-3">{e.data.role}</h2>
           <p class="muted text-sm">{e.data.company}{e.data.location ? ` — ${e.data.location}` : ''}</p>
           <p class="muted mt-3 text-sm leading-relaxed">{e.data.summary}</p>

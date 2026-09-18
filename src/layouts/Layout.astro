@@ -7,20 +7,29 @@ import SiteFooter from '../components/SiteFooter.astro';
 interface Props {
   title?: string;
   description?: string;
+  noindex?: boolean;
+  ogImage?: string;
+  articleDate?: string;
+  articleTag?: string[];
 }
 
 const {
   title = `${SITE.name} — ${SITE.role}`,
   description = SITE.description,
+  noindex = false,
+  ogImage = `${SITE.url}/og.svg`,
+  articleDate,
+  articleTag = [],
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, SITE.url);
-const jsonLd = {
+const jsonLdPerson = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: SITE.name,
   url: SITE.url,
   jobTitle: SITE.role,
+  description: SITE.description,
   address: SITE.location,
   sameAs: [SITE.github, SITE.linkedin],
 };
@@ -33,18 +42,28 @@ const jsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
+    <meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)" />
     <meta name="generator" content={Astro.generator} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={articleDate ? 'article' : 'website'} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:locale" content="fr_FR" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <meta name="twitter:image" content={ogImage} />
+    {articleDate && <meta property="article:published_time" content={articleDate} />}
+    {articleTag.map((t) => <meta property="article:tag" content={t} />)}
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdPerson)} />
+    <noscript><style>.reveal{opacity:1 !important;transform:none !important}</style></noscript>
     <script defer src="https://cloud.umami.is/script.js" data-website-id="b3726229-5a05-4b24-a8eb-3f145ed07cac"></script>
     <script is:inline>
       try {
@@ -56,7 +75,7 @@ const jsonLd = {
     </script>
   </head>
   <body>
-    <a href="#contenu" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:px-4 focus:py-2">
+    <a href="#contenu" class="skip-link sr-only focus:not-sr-only focus:absolute focus:z-50 focus:px-4 focus:py-2">
       Aller au contenu
     </a>
     <SiteHeader />
@@ -65,7 +84,8 @@ const jsonLd = {
     </main>
     <SiteFooter />
     <script is:inline>
-      // Révélation discrète au scroll
+      document.documentElement.classList.add('js');
+      // Révélation discrète au scroll (le CSS ne masque que si html.js)
       const els = document.querySelectorAll('.reveal');
       if ('IntersectionObserver' in window) {
         const io = new IntersectionObserver(
@@ -78,7 +98,7 @@ const jsonLd = {
       } else {
         els.forEach((el) => el.classList.add('is-visible'));
       }
-      // Menu mobile accessible : drawer + scroll-lock + Escape + focus
+      // Menu mobile accessible : drawer + scroll-lock + Escape + focus trap + inert
       (() => {
         const btn = document.getElementById('menu-btn');
         const menu = document.getElementById('menu-mobile');
@@ -89,6 +109,17 @@ const jsonLd = {
 
         const isOpen = () => !menu.hasAttribute('hidden');
 
+        const focusables = () => Array.from(
+          menu.querySelectorAll('a[href], button:not([disabled])')
+        ).filter((el) => el.offsetParent !== null);
+
+        const setInert = (on) => {
+          document.querySelectorAll('main, footer, .site-header nav').forEach((el) => {
+            if (on) el.setAttribute('inert', '');
+            else el.removeAttribute('inert');
+          });
+        };
+
         const openMenu = () => {
           lastFocus = document.activeElement;
           menu.removeAttribute('hidden');
@@ -98,6 +129,7 @@ const jsonLd = {
           btn.setAttribute('aria-label', 'Fermer le menu');
           btn.classList.add('is-open');
           if (label) label.textContent = 'Fermer';
+          setInert(true);
           const firstLink = panel ? panel.querySelector('a') : null;
           if (firstLink) window.requestAnimationFrame(() => firstLink.focus({ preventScroll: true }));
         };
@@ -111,6 +143,7 @@ const jsonLd = {
           btn.setAttribute('aria-label', 'Ouvrir le menu');
           btn.classList.remove('is-open');
           if (label) label.textContent = 'Menu';
+          setInert(false);
           if (restoreFocus && lastFocus && typeof lastFocus.focus === 'function') {
             lastFocus.focus({ preventScroll: true });
           } else if (restoreFocus) {
@@ -133,9 +166,22 @@ const jsonLd = {
           el.addEventListener('click', () => closeMenu(true));
         });
 
-        // Touche Escape
+        // Touche Escape + piégeage Tab dans le drawer
         document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') closeMenu(true);
+          if (!isOpen()) return;
+          if (e.key === 'Escape') { closeMenu(true); return; }
+          if (e.key !== 'Tab') return;
+          const f = focusables();
+          if (f.length === 0) return;
+          const first = f[0];
+          const last = f[f.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
         });
 
         // Si on repasse en desktop, refermer proprement

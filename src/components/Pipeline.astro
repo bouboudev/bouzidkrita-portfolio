@@ -1,0 +1,22 @@
+---
+interface Props {
+  steps: string[];
+  label?: string;
+}
+
+const { steps, label = 'Pipeline' } = Astro.props;
+---
+
+{steps.length > 0 && (
+  <p class="pipeline" role="note" aria-label={`${label} : ${steps.join(' → ')}`}>
+    <span class="meta-mono" aria-hidden="true">{label}</span>
+    <span aria-hidden="true" class="pipe-sep">·</span>
+    {steps.map((s, i) => (
+      <>
+        {i > 0 && <span class="pipe-sep" aria-hidden="true">→</span>}
+        <span>{s}</span>
+      </>
+    ))}
+    <span class="sr-only">{steps.join(', ')}</span>
+  </p>
+)}

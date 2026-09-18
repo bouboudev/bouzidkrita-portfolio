@@ -1,0 +1,58 @@
+---
+import Pipeline from './Pipeline.astro';
+
+interface Props {
+  num: string;
+  title: string;
+  description: string;
+  href: string;
+  meta: string;
+  tags?: string[];
+  highlights?: string[];
+  pipeline?: string[];
+  pipelineLabel?: string;
+  variant?: 'feature' | 'secondary';
+}
+
+const {
+  num, title, description, href, meta, tags = [],
+  highlights = [], pipeline = [], pipelineLabel = 'Pipeline',
+  variant = 'secondary',
+} = Astro.props;
+---
+
+{variant === 'feature' ? (
+  <article class="v2-une reveal">
+    <span class="ghost-num" aria-hidden="true">{num}</span>
+    <p class="meta-mono">{meta}</p>
+    <h3 class="title-lg mt-3"><a href={href}>{title}</a></h3>
+    <p class="muted mt-4 max-w-2xl text-lg leading-relaxed">{description}</p>
+    {highlights.length > 0 && (
+      <ul class="mt-5 max-w-2xl space-y-2 leading-relaxed">
+        {highlights.slice(0, 3).map((h) => <li>→ {h}</li>)}
+      </ul>
+    )}
+    {pipeline.length > 0 && (
+      <div class="mt-5 max-w-2xl"><Pipeline steps={pipeline} label={pipelineLabel} /></div>
+    )}
+    {tags.length > 0 && (
+      <ul class="mt-5 flex flex-wrap gap-2" aria-label={`Technologies : ${tags.slice(0, 5).join(', ')}`}>
+        {tags.slice(0, 5).map((t) => <li class="chip">{t}</li>)}
+      </ul>
+    )}
+    <p class="mt-6"><a href={href} class="link-accent font-semibold">Lire la fiche projet →</a></p>
+  </article>
+) : (
+  <article class="card reveal relative overflow-clip">
+    <span class="ghost-num" aria-hidden="true" style="font-size: 3.5rem;">{num}</span>
+    <p class="meta-mono">{meta}</p>
+    <h3 class="title-md mt-2"><a href={href}>{title}</a></h3>
+    <p class="muted mt-2 text-sm leading-relaxed">{description}</p>
+    {tags.length > 0 && (
+      <ul class="mt-4 flex flex-wrap gap-2" aria-label={`Technologies : ${tags.slice(0, 4).join(', ')}`}>
+        {tags.slice(0, 4).map((t) => <li class="chip">{t}</li>)}
+      </ul>
+    )}
+    <p class="mt-4"><a href={href} class="link-accent text-sm font-semibold">Lire →</a></p>
+  </article>
+)}

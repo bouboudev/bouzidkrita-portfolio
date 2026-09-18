@@ -24,10 +24,10 @@ import { SITE } from '../data/site';
 
     <form name="contact" method="POST" action="/merci/" data-netlify="true" netlify-honeypot="bot-field" class="card mt-10 space-y-5">
       <input type="hidden" name="form-name" value="contact" />
-      <p class="hidden"><label>Ne pas remplir : <input name="bot-field" /></label></p>
+      <p class="hidden" aria-hidden="true"><label>Ne pas remplir : <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
       <div class="field">
         <label for="name">Nom</label>
-        <input id="name" name="name" required autocomplete="name" />
+        <input id="name" name="name" required autocomplete="name" minlength="2" maxlength="100" />
       </div>
       <div class="field">
         <label for="email">Email</label>
@@ -35,7 +35,8 @@ import { SITE } from '../data/site';
       </div>
       <div class="field">
         <label for="message">Message</label>
-        <textarea id="message" name="message" rows="6" required></textarea>
+        <textarea id="message" name="message" rows="6" required minlength="10" maxlength="5000" aria-describedby="message-aide"></textarea>
+        <p id="message-aide" class="muted mt-1 text-sm">10 caractères minimum. Pas de données sensibles, je réponds vite et simplement.</p>
       </div>
       <button type="submit" class="btn btn-solid" data-umami-event="contact-submit">Envoyer</button>
     </form>

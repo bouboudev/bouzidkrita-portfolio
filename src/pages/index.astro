@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SectionHead from '../components/SectionHead.astro';
-import EntryRow from '../components/EntryRow.astro';
+import ProjectSpotlight from '../components/ProjectSpotlight.astro';
 import Icon from '../components/Icon.astro';
 import { SITE } from '../data/site';
 import { slugOf } from '../lib/slug';
@@ -32,43 +32,70 @@ const now = [
 <Layout>
   <!-- Hero -->
   <section class="hero-visual">
-    <div class="wrap pb-16 pt-16 md:pt-24">
-      <p class="eyebrow reveal">{SITE.name} — {SITE.location}</p>
-      <h1 class="title-xl reveal mt-5 max-w-4xl">
-        {SITE.role} — développement, support et intégration
-      </h1>
-      <p class="reveal mt-6 max-w-2xl text-lg md:text-xl" style="font-family: var(--font-display); font-style: italic;">
-        « {SITE.baseline} »
+    <div class="wrap grid grid-cols-1 gap-10 pb-14 pt-16 md:grid-cols-[1.6fr_1fr] md:pt-24">
+      <div>
+        <p class="eyebrow reveal">{SITE.name} — {SITE.location}</p>
+        <h1 class="title-xl reveal mt-5 max-w-3xl">{SITE.role}</h1>
+        <p class="reveal mt-6 max-w-2xl text-lg md:text-xl" style="font-family: var(--font-display); font-style: italic;">
+          « {SITE.baseline} »
+        </p>
+        <p class="muted reveal mt-5 max-w-2xl leading-relaxed">
+          Je conçois des applications web, je maintiens l’existant, je résous
+          des problèmes. Ouvert aux postes dev, support et intégration.
+        </p>
+        <div class="reveal mt-8 flex flex-wrap gap-4">
+          <a href="#selection" class="btn btn-solid">Voir la sélection</a>
+          <a href="/contact/" class="btn btn-ghost" data-umami-event="contact-click">Me contacter</a>
+        </div>
+      </div>
+      <aside class="status-card reveal" aria-label="Statut">
+        <dl>
+          <dt>Disponibilité</dt><dd>CDI / mission</dd>
+          <dt>Base</dt><dd>Lille — sur site et remote</dd>
+          <dt>Stack</dt><dd class="font-normal">Vue.js · Node.js · TypeScript</dd>
+          <dt>Observabilité</dt><dd class="font-normal">Prometheus · Grafana · Loki</dd>
+        </dl>
+      </aside>
+    </div>
+    <div class="wrap">
+      <p class="minibar reveal" aria-label="En bref">
+        <span><strong>3 ans</strong> — Vue.js / Node.js (2022 → 2025)</span>
+        <span><strong>Lille</strong> — sur site et remote</span>
+        <span><strong>Support</strong> — N2/N3, incidents documentés</span>
       </p>
-    <p class="muted reveal mt-5 max-w-2xl leading-relaxed">
-      Je conçois des applications web, je maintiens l’existant, je résous
-      des problèmes. Ouvert aux postes dev, support et intégration.
-    </p>
-    <div class="reveal mt-8 flex flex-wrap gap-4">
-      <a href="/projets/" class="btn btn-solid">Voir mes projets</a>
-      <a href="/contact/" class="btn btn-ghost" data-umami-event="contact-click">Me contacter</a>
-    </div>
-    <div class="facts reveal mt-12" aria-label="En bref">
-      <div><strong>3 ans</strong> — Vue.js / Node.js</div>
-      <div><strong>Lille</strong> — sur site et remote</div>
-      <div><strong>Disponible</strong></div>
-    </div>
     </div>
   </section>
   <div class="wrap"><hr class="rule" /></div>
 
   <!-- Projets -->
-  <section class="wrap py-16 md:py-20" aria-labelledby="sel-projets">
-    <SectionHead index="01" eyebrow="Sélection" title="3 projets qui me résument" />
-    <div class="mt-6" id="sel-projets">
-      {featured.map((p, i) => (
-        <EntryRow
-          num={String(i + 1).padStart(2, '0')}
+  <section class="wrap py-16 md:py-20" aria-labelledby="titre-projets" id="selection">
+    <SectionHead index="01" eyebrow="Sélection" title="3 projets qui me résument" headingId="titre-projets" />
+    {featured[0] && (
+      <div class="mt-8">
+        <ProjectSpotlight
+          num="01"
+          title={featured[0].data.title}
+          description={featured[0].data.description}
+          href={`/projets/${slugOf(featured[0])}/`}
+          meta={`${featured[0].data.category} · ${featured[0].data.status}`}
+          tags={featured[0].data.stack}
+          highlights={featured[0].data.highlights}
+          pipeline={featured[0].id.includes('easytravel') ? ['Docker', 'Telegraf', 'Prometheus', 'Grafana'] : featured[0].id.includes('design-system') ? ['Atomes', 'Molécules', 'Organismes', 'Storybook'] : []}
+          pipelineLabel={featured[0].id.includes('easytravel') ? 'Métriques' : 'Architecture'}
+          variant="feature"
+        />
+      </div>
+    )}
+    <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+      {featured.slice(1, 3).map((p, i) => (
+        <ProjectSpotlight
+          num={String(i + 2).padStart(2, '0')}
           title={p.data.title}
           description={p.data.description}
           href={`/projets/${slugOf(p)}/`}
           meta={`${p.data.category} · ${p.data.status}`}
           tags={p.data.stack}
+          variant="secondary"
         />
       ))}
     </div>
@@ -78,15 +105,17 @@ const now = [
   <div class="wrap"><hr class="rule" /></div>
 
   <!-- Domaines -->
-  <section class="wrap py-16 md:py-20">
-    <SectionHead index="02" eyebrow="Savoir-faire" title="Domaines dans lesquels j’interviens" />
-    <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+  <section class="wrap py-16 md:py-20" aria-labelledby="titre-savoir-faire">
+    <SectionHead index="02" eyebrow="Savoir-faire" title="Ce que je fais le mieux" headingId="titre-savoir-faire" />
+    <div class="mt-8">
       {domains.map((d) => (
-        <article class="card reveal">
-          <span class="icon-badge"><Icon name={d.icon} /></span>
-          <h3 class="title-md">{d.title}</h3>
-          <p class="muted mt-1 text-sm">{d.text}</p>
-        </article>
+        <div class="skill-row reveal">
+          <div>
+            <h3 class="text-base font-semibold leading-snug"><span class="icon-inline"><Icon name={d.icon} /></span>{d.title}</h3>
+            <p class="muted mt-1 text-sm">{d.text}</p>
+          </div>
+          <p class="stack meta-mono">{d.title.includes('Développement') ? 'Vue.js · Node.js · TS' : d.title.includes('Support') ? 'N2/N3 · incidents · docs' : d.title.includes('Intégration') ? 'DS · a11y · fiabilisation' : 'Docker · Prometheus · Loki'}</p>
+        </div>
       ))}
     </div>
   </section>
@@ -94,24 +123,24 @@ const now = [
   <div class="wrap"><hr class="rule" /></div>
 
   <!-- Parcours -->
-  <section class="wrap py-16 md:py-20">
-    <SectionHead index="03" eyebrow="Parcours" title="D’où je viens" />
-    <div class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+  <section class="wrap py-16 md:py-20" aria-labelledby="titre-parcours">
+    <SectionHead index="03" eyebrow="Parcours" title="D’où je viens" headingId="titre-parcours" />
+    <ol class="timeline mt-8">
       {exps.map((e) => (
-        <article class="card reveal">
-          <p class="eyebrow">{e.data.startDate}{e.data.endDate ? ` → ${e.data.endDate}` : ''}</p>
-          <h3 class="mt-2 text-base font-semibold leading-snug">{e.data.role}<br /><span class="muted font-normal">{e.data.company}</span></h3>
-        </article>
+        <li class="reveal">
+          <p class="meta-mono">{e.data.startDate}{e.data.endDate ? ` → ${e.data.endDate}` : ''} · {e.data.company}</p>
+          <h3 class="mt-2 text-base font-semibold leading-snug">{e.data.role}</h3>
+        </li>
       ))}
-    </div>
+    </ol>
     <p class="mt-6"><a href="/parcours/" class="link-accent font-semibold">Parcours complet →</a></p>
   </section>
 
   <div class="wrap"><hr class="rule" /></div>
 
   <!-- En ce moment -->
-  <section class="wrap py-16 md:py-20">
-    <SectionHead index="04" eyebrow="En ce moment" title="Ce que j’explore actuellement" />
+  <section class="wrap py-16 md:py-20" aria-labelledby="titre-moment">
+    <SectionHead index="04" eyebrow="En ce moment" title="Ce que j’explore" headingId="titre-moment" />
     <ul class="mt-6 max-w-2xl space-y-3 leading-relaxed">
       {now.map((item) => (
         <li class="reveal"><span class="icon-inline"><Icon name={item.icon} /></span>{item.text}</li>
@@ -123,9 +152,10 @@ const now = [
   <div class="wrap"><hr class="rule" /></div>
 
   <!-- Contact -->
-  <section class="wrap py-14 text-center md:py-16">
+  <section class="wrap py-14 text-center md:py-16" aria-labelledby="titre-contact">
     <p class="eyebrow reveal">Contact</p>
-    <h2 class="title-lg reveal mx-auto mt-3 max-w-xl">Un poste dev, support ou intégration à pourvoir ?</h2>
+    <h2 class="title-lg reveal mx-auto mt-3 max-w-xl" id="titre-contact">Un poste dev, support ou intégration à pourvoir ?</h2>
+    <p class="muted reveal mx-auto mt-4 max-w-xl">Basé à Lille, disponible pour CDI ou mission — sur site et remote.</p>
     <div class="reveal mt-8 flex flex-wrap justify-center gap-4">
       <a href="/contact/" class="btn btn-solid" data-umami-event="contact-click">Me contacter</a>
       <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="btn btn-ghost" data-umami-event="github-click">GitHub ↗</a>

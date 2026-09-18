@@ -57,11 +57,11 @@ const isActive = (href: string) => {
     <button
       id="theme-btn"
       type="button"
-      class="inline-flex min-h-[44px] items-center rounded-full border px-4 text-xs font-semibold"
+      class="theme-btn inline-flex min-h-[44px] items-center rounded-full border px-4 text-xs font-semibold"
       style="border-color: var(--color-line)"
       aria-label="Basculer entre thème clair et sombre"
     >
-      ◐ Thème
+      <span aria-hidden="true">◐</span>&nbsp;<span class="theme-label">Thème</span>
     </button>
     <button
       id="menu-btn"
@@ -78,7 +78,7 @@ const isActive = (href: string) => {
   </div>
 </header>
 
-<div id="menu-mobile" class="mobile-menu" hidden>
+<div id="menu-mobile" class="mobile-menu" hidden role="dialog" aria-modal="true" aria-label="Menu de navigation">
   <div class="mobile-menu-backdrop" data-menu-close aria-hidden="true"></div>
   <nav class="mobile-menu-panel wrap" aria-label="Navigation mobile" id="menu-mobile-nav">
     <ul class="mobile-menu-list">

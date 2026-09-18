@@ -13,24 +13,43 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
+const isRenderDemo = (project.data.demo ?? '').includes('onrender.com');
+const jsonLdProject = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: project.data.title,
+  description: project.data.description,
+  codeRepository: project.data.github,
+  programmingLanguage: project.data.stack,
+  author: { '@type': 'Person', name: 'Bouzid Krita', url: 'https://www.bouzidkrita.com' },
+};
 ---
 
 <Layout title={`${project.data.title} — Bouzid Krita`} description={project.data.description}>
   <article class="wrap max-w-3xl py-14 md:py-20">
-    <a href="/projets/" class="link-accent text-sm font-semibold">← Tous les projets</a>
+    <nav aria-label="Fil d'Ariane"><a href="/projets/" class="link-accent text-sm font-semibold">← Tous les projets</a></nav>
     <p class="eyebrow mt-8">{project.data.category} · {project.data.status}</p>
     <h1 class="title-lg mt-3">{project.data.title}</h1>
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdProject)} />
     <p class="muted mt-4 text-lg leading-relaxed">{project.data.description}</p>
 
     <div class="mt-8 flex flex-wrap gap-3">
       <a href={project.data.github} target="_blank" rel="noopener noreferrer" class="btn btn-solid">GitHub ↗</a>
       {project.data.demo && <a href={project.data.demo} target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Démo ↗</a>}
     </div>
+    {isRenderDemo && (
+      <p class="muted mt-3 text-sm">Démo hébergée sur offre gratuite Render : le premier chargement peut prendre ~30 s (mise en veille).</p>
+    )}
+    {project.data.image ? (
+      <img src={project.data.image} alt={`Aperçu du projet ${project.data.title}`} class="mt-8 w-full rounded-xl border" style="border-color: var(--color-line)" loading="lazy" />
+    ) : (
+      <p class="muted mt-8 text-sm italic" role="note">Visuel du projet à venir — captures, schéma d'architecture ou Storybook.</p>
+    )}
 
     <dl class="fiche mt-10" aria-label="Fiche projet">
       <div><dt>Statut</dt><dd>{project.data.status}</dd></div>
       <div><dt>Domaine</dt><dd class="capitalize">{project.data.category}</dd></div>
-      <div><dt>Au cœur</dt><dd>{project.data.stack.slice(0, 3).join(' · ')}</dd></div>
+      <div><dt>Stack principale</dt><dd>{project.data.stack.slice(0, 3).join(' · ')}</dd></div>
       <div><dt>Code</dt><dd><a class="link-accent" href={project.data.github} target="_blank" rel="noopener noreferrer">Voir le repo ↗</a></dd></div>
     </dl>
 

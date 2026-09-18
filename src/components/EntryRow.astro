@@ -11,16 +11,16 @@ interface Props {
 const { num, title, description, href, meta, tags = [] } = Astro.props;
 ---
 
-<a href={href} class="entry-row reveal" aria-label={title}>
-  <span class="entry-num">{num}</span>
+<a href={href} class="entry-row reveal">
+  <span class="entry-num" aria-hidden="true">{num}</span>
   <span>
     <span class="entry-title">{title}</span>
     <span class="muted mt-2 block max-w-xl text-sm leading-relaxed">{description}</span>
     {tags.length > 0 && (
-      <span class="mt-3 flex flex-wrap gap-2">
+      <span class="mt-3 flex flex-wrap gap-2" aria-label={`Technologies : ${tags.slice(0, 4).join(', ')}`}>
         {tags.slice(0, 4).map((t) => <span class="chip">{t}</span>)}
       </span>
     )}
   </span>
-  <span class="entry-meta">{meta}<br /><span class="entry-arrow" aria-hidden="true">→</span></span>
+  <span class="entry-meta"><span class="sr-only">{meta}. </span><span aria-hidden="true">{meta}<br /><span class="entry-arrow">→</span></span></span>
 </a>
