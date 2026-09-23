@@ -23,8 +23,7 @@ const {
 
 {variant === 'feature' ? (
   <article class="v2-une reveal">
-    <span class="ghost-num" aria-hidden="true">{num}</span>
-    <p class="meta-mono">{meta}</p>
+    <p class="meta-mono text-[0.8rem]">{meta}</p>
     <h3 class="title-lg mt-3"><a href={href}>{title}</a></h3>
     <p class="muted mt-4 max-w-2xl text-lg leading-relaxed">{description}</p>
     {highlights.length > 0 && (
@@ -44,15 +43,14 @@ const {
   </article>
 ) : (
   <article class="card reveal relative overflow-clip">
-    <span class="ghost-num" aria-hidden="true" style="font-size: 3.5rem;">{num}</span>
-    <p class="meta-mono">{meta}</p>
+    <p class="meta-mono text-[0.8rem]">{meta}</p>
     <h3 class="title-md mt-2"><a href={href}>{title}</a></h3>
-    <p class="muted mt-2 text-sm leading-relaxed">{description}</p>
+    <p class="muted mt-2 text-base leading-relaxed">{description}</p>
     {tags.length > 0 && (
       <ul class="mt-4 flex flex-wrap gap-2" aria-label={`Technologies : ${tags.slice(0, 4).join(', ')}`}>
         {tags.slice(0, 4).map((t) => <li class="chip">{t}</li>)}
       </ul>
     )}
-    <p class="mt-4"><a href={href} class="link-accent text-sm font-semibold">Lire →</a></p>
+    <p class="mt-4"><a href={href} class="link-accent font-semibold">Lire →</a></p>
   </article>
 )}

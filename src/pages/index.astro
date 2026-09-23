@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import SectionHead from '../components/SectionHead.astro';
 import ProjectSpotlight from '../components/ProjectSpotlight.astro';
-import Icon from '../components/Icon.astro';
 import { SITE } from '../data/site';
 import { slugOf } from '../lib/slug';
 import { getCollection } from 'astro:content';
@@ -15,61 +14,29 @@ const featured = (await getCollection('projects'))
 const exps = (await getCollection('experience'))
   .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 3);
-
-const domains = [
-  { icon: 'code', title: 'Développement web', text: 'Vue.js, Node.js, TypeScript.' },
-  { icon: 'support', title: 'Support applicatif', text: 'Diagnostic N2/N3, incidents, documentation.' },
-  { icon: 'layout', title: 'Intégration & UI', text: 'Design System, accessibilité, fiabilisation.' },
-  { icon: 'container', title: 'Docker & monitoring', text: 'Prometheus, Grafana, Loki.' },
-] as const;
-
-const now = [
-  { icon: 'compass', text: 'Monitoring : Prometheus, Grafana, Loki sur EasyTravel.' },
-  { icon: 'flask', text: 'Agents IA : usages, limites, revue critique.' },
-] as const;
 ---
 
 <Layout>
   <!-- Hero -->
   <section class="hero-visual">
-    <div class="wrap grid grid-cols-1 gap-10 pb-14 pt-16 md:grid-cols-[1.6fr_1fr] md:pt-24">
-      <div>
-        <p class="eyebrow reveal">{SITE.name} — {SITE.location}</p>
-        <h1 class="title-xl reveal mt-5 max-w-3xl">{SITE.role}</h1>
-        <p class="reveal mt-6 max-w-2xl text-lg md:text-xl" style="font-family: var(--font-display); font-style: italic;">
-          « {SITE.baseline} »
-        </p>
-        <p class="muted reveal mt-5 max-w-2xl leading-relaxed">
-          Je conçois des applications web, je maintiens l’existant, je résous
-          des problèmes. Ouvert aux postes dev, support et intégration.
-        </p>
-        <div class="reveal mt-8 flex flex-wrap gap-4">
-          <a href="#selection" class="btn btn-solid">Voir la sélection</a>
-          <a href="/contact/" class="btn btn-ghost" data-umami-event="contact-click">Me contacter</a>
-        </div>
-      </div>
-      <aside class="status-card reveal" aria-label="Statut">
-        <dl>
-          <dt>Disponibilité</dt><dd>CDI / mission</dd>
-          <dt>Base</dt><dd>Lille — sur site et remote</dd>
-          <dt>Stack</dt><dd class="font-normal">Vue.js · Node.js · TypeScript</dd>
-          <dt>Observabilité</dt><dd class="font-normal">Prometheus · Grafana · Loki</dd>
-        </dl>
-      </aside>
-    </div>
-    <div class="wrap">
-      <p class="minibar reveal" aria-label="En bref">
-        <span><strong>3 ans</strong> — Vue.js / Node.js (2022 → 2025)</span>
-        <span><strong>Lille</strong> — sur site et remote</span>
-        <span><strong>Support</strong> — N2/N3, incidents documentés</span>
+    <div class="wrap hero-calm">
+      <p class="eyebrow reveal">Bouzid Krita — Développeur full-stack · Lille</p>
+      <h1 class="title-xl reveal hero-title mt-5">Je développe et <span class="squiggle">fais évoluer</span> des applications web.</h1>
+      <p class="reveal hero-desc mt-6 text-lg leading-relaxed">
+        Du front-end au back-end, je développe et fais évoluer des produits avec
+        Vue.js, TypeScript et Node.js.
       </p>
+      <p class="meta-mono reveal hero-proof mt-6">3 ans d’expérience produit · Full-stack · Vue.js · Node.js</p>
+      <div class="reveal hero-cta mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+        <a href="#selection" class="btn btn-solid hero-cta-btn">Voir mes projets</a>
+        <a href="/contact/" class="btn btn-ghost hero-cta-btn" data-umami-event="contact-click">Me contacter</a>
+      </div>
     </div>
   </section>
-  <div class="wrap"><hr class="rule" /></div>
 
   <!-- Projets -->
-  <section class="wrap py-16 md:py-20" aria-labelledby="titre-projets" id="selection">
-    <SectionHead index="01" eyebrow="Sélection" title="3 projets qui me résument" headingId="titre-projets" />
+  <section class="wrap py-20 md:py-24" aria-labelledby="titre-projets" id="selection">
+    <SectionHead index="01" eyebrow="Sélection" title="Comment je fiabilise une application" description="Trois cas concrets : investiguer en conditions proches du réel, construire un socle d’interfaces testé, livrer un outil simple sans complexité inutile." headingId="titre-projets" />
     {featured[0] && (
       <div class="mt-8">
         <ProjectSpotlight
@@ -99,32 +66,14 @@ const now = [
         />
       ))}
     </div>
-    <p class="mt-6"><a href="/projets/" class="link-accent font-semibold">Tous les projets →</a></p>
+    <p class="muted mt-8 max-w-2xl leading-relaxed">Au quotidien : Vue.js, TypeScript, Node.js — Storybook, tests Cypress / Vitest / Playwright, monitoring Prometheus.</p>
+    <p class="mt-6"><a href="/projets/" class="link-accent text-lg font-semibold">Tous les projets →</a></p>
   </section>
 
-  <div class="wrap"><hr class="rule" /></div>
-
-  <!-- Domaines -->
-  <section class="wrap py-16 md:py-20" aria-labelledby="titre-savoir-faire">
-    <SectionHead index="02" eyebrow="Savoir-faire" title="Ce que je fais le mieux" headingId="titre-savoir-faire" />
-    <div class="mt-8">
-      {domains.map((d) => (
-        <div class="skill-row reveal">
-          <div>
-            <h3 class="text-base font-semibold leading-snug"><span class="icon-inline"><Icon name={d.icon} /></span>{d.title}</h3>
-            <p class="muted mt-1 text-sm">{d.text}</p>
-          </div>
-          <p class="stack meta-mono">{d.title.includes('Développement') ? 'Vue.js · Node.js · TS' : d.title.includes('Support') ? 'N2/N3 · incidents · docs' : d.title.includes('Intégration') ? 'DS · a11y · fiabilisation' : 'Docker · Prometheus · Loki'}</p>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <div class="wrap"><hr class="rule" /></div>
-
-  <!-- Parcours -->
-  <section class="wrap py-16 md:py-20" aria-labelledby="titre-parcours">
-    <SectionHead index="03" eyebrow="Parcours" title="D’où je viens" headingId="titre-parcours" />
+  <!-- Expérience -->
+  <div class="band">
+  <section class="wrap py-20 md:py-24" aria-labelledby="titre-parcours">
+    <SectionHead index="02" eyebrow="Parcours" title="Une expérience ancrée dans le produit" description="De la feature à la maintenance : plateforme à fort trafic, intégration d’API et fiabilisation des parcours critiques." headingId="titre-parcours" />
     <ol class="timeline mt-8">
       {exps.map((e) => (
         <li class="reveal">
@@ -133,32 +82,18 @@ const now = [
         </li>
       ))}
     </ol>
-    <p class="mt-6"><a href="/parcours/" class="link-accent font-semibold">Parcours complet →</a></p>
+    <p class="mt-6"><a href="/parcours/" class="link-accent text-lg font-semibold">Parcours complet →</a></p>
   </section>
-
-  <div class="wrap"><hr class="rule" /></div>
-
-  <!-- En ce moment -->
-  <section class="wrap py-16 md:py-20" aria-labelledby="titre-moment">
-    <SectionHead index="04" eyebrow="En ce moment" title="Ce que j’explore" headingId="titre-moment" />
-    <ul class="mt-6 max-w-2xl space-y-3 leading-relaxed">
-      {now.map((item) => (
-        <li class="reveal"><span class="icon-inline"><Icon name={item.icon} /></span>{item.text}</li>
-      ))}
-    </ul>
-    <p class="mt-6"><a href="/blog/" class="link-accent font-semibold">Lire mes notes →</a></p>
-  </section>
-
-  <div class="wrap"><hr class="rule" /></div>
+  </div>
 
   <!-- Contact -->
   <section class="wrap py-14 text-center md:py-16" aria-labelledby="titre-contact">
     <p class="eyebrow reveal">Contact</p>
-    <h2 class="title-lg reveal mx-auto mt-3 max-w-xl" id="titre-contact">Un poste dev, support ou intégration à pourvoir ?</h2>
-    <p class="muted reveal mx-auto mt-4 max-w-xl">Basé à Lille, disponible pour CDI ou mission — sur site et remote.</p>
+    <h2 class="title-lg reveal mx-auto mt-3 max-w-xl" id="titre-contact">Besoin d’un développeur full-stack capable de comprendre l’existant et de le faire évoluer ?</h2>
+    <p class="muted reveal mx-auto mt-4 max-w-xl">Basé à Lille, je conçois, maintiens et fiabilise des interfaces Vue.js avec une attention particulière portée à la qualité du code, aux tests et à la documentation.</p>
     <div class="reveal mt-8 flex flex-wrap justify-center gap-4">
-      <a href="/contact/" class="btn btn-solid" data-umami-event="contact-click">Me contacter</a>
-      <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="btn btn-ghost" data-umami-event="github-click">GitHub ↗</a>
+      <a href="/contact/" class="btn btn-solid" data-umami-event="contact-click">Échanger avec moi</a>
+      <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="btn btn-ghost" data-umami-event="github-click">Voir mon GitHub ↗</a>
     </div>
   </section>
 </Layout>

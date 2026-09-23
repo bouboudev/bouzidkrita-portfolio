@@ -1,9 +1,9 @@
 export const SITE = {
   name: 'Bouzid Krita',
-  role: 'Développeur Vue.js / Node.js — Support & Intégration',
+  role: 'Développeur full-stack — applications web',
   baseline: 'Je développe, j’intègre, je dépanne et j’expérimente.',
   description:
-    'Bouzid Krita, développeur Vue.js / Node.js à Lille : développement web, support applicatif N2/N3, intégration, Docker et monitoring (Prometheus, Grafana, Loki).',
+    'Bouzid Krita, développeur full-stack à Lille : applications web complètes, maintenance de l’existant, Design System, tests et documentation.',
   url: 'https://www.bouzidkrita.com',
   github: 'https://github.com/bouboudev',
   linkedin: 'https://fr.linkedin.com/in/bouzidkrita',

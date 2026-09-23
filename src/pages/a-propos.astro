@@ -1,39 +1,52 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { SITE } from '../data/site';
 ---
 
 <Layout title="À propos — Bouzid Krita" description="Parcours, motivations et manière de travailler de Bouzid Krita.">
-  <section class="wrap max-w-3xl py-14 md:py-20">
+  <section class="wrap py-14 md:py-20">
+    <div class="prose-measure">
     <p class="eyebrow">À propos</p>
-    <h1 class="title-xl mt-4">Comprendre avant d’agir</h1>
+    <h1 class="title-lg mt-4">Je développe des applications qui évoluent avec leurs utilisateurs.</h1>
     <div class="prose-bk mt-8">
       <p>
-        Je m’appelle <strong>Bouzid Krita</strong>, basé à Lille.
-        Je suis un profil polyvalent, opérationnel et curieux, entre développement,
-        support applicatif et intégration.
+        Je suis Bouzid Krita, développeur full-stack basé à Lille. Avec Vue.js et
+        Node.js, je travaille sur des produits web existants : je comprends leur
+        fonctionnement, je résous les problèmes concrets et je les fais évoluer
+        sans compliquer leur usage.
       </p>
+      <div class="mt-8 flex flex-col gap-3 md:hidden">
+        <a href="/contact/" class="btn btn-solid" data-umami-event="contact-click">Me contacter</a>
+        <a href="/projets/" class="btn btn-ghost">Voir mes projets</a>
+      </div>
+      <h2>Mon parcours</h2>
       <p>
-        Après quelques années en relation client — une première école de l’écoute
-        et du diagnostic — reconversion via l’AFPA (2020-2021), puis 3 ans comme
-        développeur Vue.js / Node.js chez Mercateam, Habiteo puis Bien’ici.
+        J’ai d’abord travaillé dans la relation client, où j’ai appris à écouter,
+        à poser les bonnes questions et à comprendre un besoin avant de proposer
+        une solution. Après une reconversion à l’AFPA, j’ai développé des applications
+        et des interfaces chez Mercateam, Habiteo et Bien’ici.
       </p>
+      <h2>Ce qui me motive</h2>
       <p>
-        Ce que j’aime : <strong>comprendre comment les systèmes fonctionnent</strong>.
-        Pourquoi ça casse, où l’information se perd, comment fiabiliser un parcours
-        existant. C’est ce qui me porte vers le support applicatif et l’intégration.
+        J’aime entrer dans un produit, comprendre pourquoi il fonctionne ainsi, puis
+        trouver ce qui peut être simplifié ou fiabilisé. Cela peut passer par une
+        interface plus claire, un flux de données mieux maîtrisé ou une correction
+        qui évite au même problème de revenir.
       </p>
+      <h2>Ma façon de travailler</h2>
       <p>
-        Ma méthode : reformuler le besoin, investiguer avec méthode, documenter,
-        puis corriger sans compliquer. Et continuer à apprendre par la pratique.
+        Je pars du besoin et de l’existant. J’échange avec les personnes concernées,
+        j’investigue, puis je propose une solution adaptée au produit. Je documente
+        ce qui compte et je privilégie un code que l’équipe pourra comprendre et
+        faire évoluer.
       </p>
+      <h2>Échangeons</h2>
       <p>
-        Je vise des postes variés — développement web, support applicatif, intégration,
-        exploitation / maintenance, IT polyvalent.
-        <a href="/contact/" data-umami-event="contact-click">Contactez-moi</a> — ou retrouvez-moi sur
-        <a href={SITE.github} target="_blank" rel="noopener noreferrer" data-umami-event="github-click">GitHub</a> et
-        <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer" data-umami-event="linkedin-click">LinkedIn</a>.
+        Je recherche un poste de développeur full-stack où je pourrai contribuer
+        à un produit dans la durée.
+        <a href="/contact/" data-umami-event="contact-click">Me contacter</a> ·
+        <a href="/projets/">Voir mes projets</a>
       </p>
+    </div>
     </div>
   </section>
 </Layout>
